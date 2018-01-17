@@ -31,4 +31,17 @@ io.on('connection', function(socket)
     console.log('a user disconnected');
 
   });
+
+  socket.on("writeIntoDb", function(msg)
+  {
+    let key = msg.key;
+    let value = msg.value;
+
+    writeIntoDb(key, value);
+  });
 });
+
+function writeIntoDb(key, value)
+{
+  ...
+}
