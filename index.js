@@ -39,9 +39,22 @@ io.on('connection', function(socket)
 
     writeIntoDb(key, value);
   });
+
+  socket.on("requestData", function(msg)
+  {
+    let key = msg.key;
+    let value = readDatafromDb(key);
+
+    socket.emit("getData", value);
+  });
 });
 
 function writeIntoDb(key, value)
 {
-  ...
+  // ...
+}
+
+function readDatafromDb(key)
+{
+  //  ...
 }
