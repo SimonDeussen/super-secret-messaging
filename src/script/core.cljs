@@ -12,9 +12,32 @@
 (js-invoke js/socket "emit" "hello" "clojure")
 
 (comment "
-add button eventhandler
-add encryption
-send message DONE
-show link localhost:3000/keyForDB - TRENNZEICHEN - keyForEncryption
+TODO
+
+SAVE
+
+getMessage()
+  ret message
+
+encryptMessage(message)
+  ret key
+      cmessage
+
+hashMessage(cmessage)
+  ret dbKey
+
+saveMessage(dbkey, cmessage)
+
+GET
+
+splitUrl()
+  ret dkbey
+      key
+
+getDataAndDelete(dkbey)
+  ret cmessage
+
+decryptMessage(key, cmessage)
+  ret message
 
 ")
