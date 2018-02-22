@@ -1,3 +1,62 @@
 h1 {
-  color: red;
+  color: black
+  ;
+}
+
+.navbar {
+  width: 100%;
+  height: 100px;
+  background-color: #462525;
+  box-shadow: 0 0 4px #00000033;
+}
+
+
+.logo-wrapper {
+  height: 100%;
+  width: 100px;
+  margin: auto;
+  padding-top: 20px
+
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.main-wrapper {
+  width: 100%;
+}
+
+.inner {
+  width: 66vw;
+  height: calc(100vh - 120px);
+  margin: auto;
+  background-color: #f4f4f4;
+  padding: 10px;
+  box-shadow: 0 0 4px #00000033;
+}
+
+.upper-part {
+}
+
+.upper-part > h1 {
+  margin: 0px;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.lower-part {
+}
+
+.lower-part > textarea {
+width: 95%;
+height: 400px;
+margin: 20px 2.5%;
+}
+
+.lower-part > button {
+  width: 96%;
+  margin: 0 2.5%;
+  padding: 20px 0;
 }

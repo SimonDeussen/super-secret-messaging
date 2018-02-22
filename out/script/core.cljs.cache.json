@@ -1,0 +1,1 @@
+["^ ","~:rename-macros",["^ "],"~:renames",["^ "],"~:externs",["^ ","~$socket",["^ "]],"~:use-macros",["^ "],"~:excludes",["~#set",[]],"~:name","~$script.core","~:imports",null,"~:requires",["^ ","~$dom","~$goog.dom","^<","^<","~$io","~$socket.io","^>","^>"],"~:cljs.spec/speced-vars",[],"~:uses",null,"~:cljs.spec/registry-ref",[],"~:require-macros",null,"~:doc",null]

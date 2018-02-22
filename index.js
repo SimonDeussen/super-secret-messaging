@@ -8,6 +8,7 @@ let io = require('socket.io')(http);
 
 //making the public folder public
 app.use("/public", express.static(__dirname + "/public"));
+app.use("/out", express.static(__dirname + "/out"));
 
 //serving html
 app.get('/', function(req, res)
@@ -47,6 +48,11 @@ io.on('connection', function(socket)
 
     socket.emit("getData", value);
   });
+
+  socket.on("hello", function(msg)
+  {
+    console.log("hello from " + msg);
+  })
 });
 
 function writeIntoDb(key, value)
