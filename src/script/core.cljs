@@ -8,36 +8,65 @@
 (enable-console-print!)
 
 (println "Hello clojurescript!")
-
 (js-invoke js/socket "emit" "hello" "clojure")
 
-(comment "
-TODO
+(defn emitSocket [socketName msg]
+  (js-invoke js/socket "emit" socketName msg))
 
-SAVE
+(emitSocket "hello" "asdfadfafa")
 
-getMessage()
-  ret message
+; (emitSocket "hello" "from clojurescript")
 
-encryptMessage(message)
-  ret key
-      cmessage
+; (defn getTextContent [id]
+;   (-> js/document
+;     (.getElementById id)
+;     (.-value)))
+;
+; (defn getElement [id]
+;   (-> js/document
+;     (.getElementById id)))
+;
+; (println (getTextContent "submit"))
+;
+;
+; (defn addClick [id handler]
+;   (.addEventListener (getElement id) "click" handler))
+;
+; (addClick "submit"
+;   (fn a []
+;   (emitSocket
+;     "hello"
+;     (getTextContent "textInput"))
+;   (println (getTextContent "textInput"))))
 
-hashMessage(cmessage)
-  ret dbKey
-
-saveMessage(dbkey, cmessage)
-
-GET
-
-splitUrl()
-  ret dkbey
-      key
-
-getDataAndDelete(dkbey)
-  ret cmessage
-
-decryptMessage(key, cmessage)
-  ret message
-
-")
+; (comment "
+; TODO
+;
+;
+;
+; SAVE
+;
+; getMessage() DONE
+;   ret message
+;
+; encryptMessage(message)
+;   ret key
+;       cmessage
+;
+; hashMessage(cmessage)
+;   ret dbKey
+;
+; saveMessage(dbkey, cmessage)
+;
+; GET
+;
+; splitUrl()
+;   ret dkbey
+;       key
+;
+; getDataAndDelete(dkbey)
+;   ret cmessage
+;
+; decryptMessage(key, cmessage)
+;   ret message
+; ")
