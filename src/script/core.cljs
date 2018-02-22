@@ -1,7 +1,9 @@
 
 (ns script.core
   (:require [goog.dom :as dom]
-            [socket.io :as io]))
+            [socket.io :as io]
+            [cognitect.transit :as t]))
+
 
 
 
@@ -37,8 +39,6 @@
 
 (comment "
 TODO
-
-
 
 SAVE
 
