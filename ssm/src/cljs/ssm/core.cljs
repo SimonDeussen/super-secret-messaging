@@ -10,12 +10,37 @@
 
   (defn emitSocket [socketName msg]
     (js-invoke js/socket "emit" socketName msg))
+    ;
+    ; /*** encrypt */
+    ; var ciphertext = Crypt.AES.encrypt("plaintext");
+    ; console.log(ciphertext);
 
-  (defn createKey []
-    (js-invoke js/SimpleCryptoJS "generateRandom" 256))
+(defn hash-md5 [input]
+  (-> js/Crypt
+    (.-HASH)
+    (.sha1 input)
+    (.toString)))
 
-  (println (createKey))
 
+(defn encrypt [input key]
+  (-> js/Crypt
+    (.-AES)
+    (.encrypt input key)))
+
+(defn decrypt [input key]
+  (-> js/Crypt
+    (.-AES)
+    (.decrypt input key)))
+
+(def my-msg "blablablab")
+(def my-key (hash-md5 my-msg))
+(def my-secret (encrypt my-msg my-key))
+(def my-plain (decrypt my-secret my-key))
+
+(println my-msg)
+(println my-key)
+(println my-secret)
+(println my-plain)
 
   (defn getTextContent [id]
     (-> js/document

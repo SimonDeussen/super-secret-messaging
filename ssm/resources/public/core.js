@@ -28924,10 +28924,23 @@ cljs.core.js_invoke.call(null, socket, "emit", "hello", "clojure");
 ssm.core.emitSocket = function emitSocket(socketName, msg) {
   return cljs.core.js_invoke.call(null, socket, "emit", socketName, msg);
 };
-ssm.core.createKey = function createKey() {
-  return cljs.core.js_invoke.call(null, SimpleCryptoJS, "generateRandom", 256);
+ssm.core.hash_md5 = function hash_md5(input) {
+  return Crypt.HASH.sha1(input).toString();
 };
-cljs.core.println.call(null, ssm.core.createKey.call(null));
+ssm.core.encrypt = function encrypt(input, key) {
+  return Crypt.AES.encrypt(input, key);
+};
+ssm.core.decrypt = function decrypt(input, key) {
+  return Crypt.AES.decrypt(input, key);
+};
+ssm.core.my_msg = "blablablab";
+ssm.core.my_key = ssm.core.hash_md5.call(null, ssm.core.my_msg);
+ssm.core.my_secret = ssm.core.encrypt.call(null, ssm.core.my_msg, ssm.core.my_key);
+ssm.core.my_plain = ssm.core.decrypt.call(null, ssm.core.my_secret, ssm.core.my_key);
+cljs.core.println.call(null, ssm.core.my_msg);
+cljs.core.println.call(null, ssm.core.my_key);
+cljs.core.println.call(null, ssm.core.my_secret);
+cljs.core.println.call(null, ssm.core.my_plain);
 ssm.core.getTextContent = function getTextContent(id) {
   return document.getElementById(id).value;
 };

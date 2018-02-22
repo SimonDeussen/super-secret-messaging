@@ -5,7 +5,5 @@ console.log("hello world")
 socket.emit("hello", "javascript")
 
 var Crypt = new Crypt();  // constructor
-
-/*** encrypt */
-var ciphertext = Crypt.AES.encrypt("plaintext");
-console.log(ciphertext);
+var digest_sha1 = Crypt.HASH.sha1("message");
+console.log(digest_sha1.toString());
