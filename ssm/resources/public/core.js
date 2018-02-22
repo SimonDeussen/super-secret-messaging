@@ -28924,6 +28924,10 @@ cljs.core.js_invoke.call(null, socket, "emit", "hello", "clojure");
 ssm.core.emitSocket = function emitSocket(socketName, msg) {
   return cljs.core.js_invoke.call(null, socket, "emit", socketName, msg);
 };
+ssm.core.createKey = function createKey() {
+  return cljs.core.js_invoke.call(null, SimpleCryptoJS, "generateRandom", 256);
+};
+cljs.core.println.call(null, ssm.core.createKey.call(null));
 ssm.core.getTextContent = function getTextContent(id) {
   return document.getElementById(id).value;
 };

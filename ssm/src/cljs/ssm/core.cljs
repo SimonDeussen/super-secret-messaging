@@ -1,10 +1,7 @@
   (ns ssm.core
-    (:require [goog.dom :as dom]
-              
-        ))
+    (:require   [goog.dom :as dom]
 
-
-
+                 ))
 
   (enable-console-print!)
 
@@ -13,6 +10,11 @@
 
   (defn emitSocket [socketName msg]
     (js-invoke js/socket "emit" socketName msg))
+
+  (defn createKey []
+    (js-invoke js/SimpleCryptoJS "generateRandom" 256))
+
+  (println (createKey))
 
 
   (defn getTextContent [id]
@@ -35,6 +37,8 @@
     (println (getTextContent "textInput")))
 
   (addClick "submit" dummyClick)
+
+
 
   (comment "
   TODO
