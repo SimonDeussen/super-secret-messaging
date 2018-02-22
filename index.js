@@ -1,4 +1,14 @@
 let express = require('express');
+const sqLite = require('sqlite3').verbose();
+let database = new sqLite.Database('./database.db', (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log('Connected to the in-memory SQlite database.');
+
+});
+
+database.run("CREATE TABLE IF NOT EXISTS notes (key TEXT PRIMARY KEY, value TEXT)");
 
 const app = express();
 const port = 3000;
@@ -43,18 +53,28 @@ io.on('connection', function(socket)
   socket.on("requestData", function(msg)
   {
     let key = msg.key;
-    let value = readDatafromDb(key);
-
-    socket.emit("getData", value);
+    readDatafromDb(key).then((value) =>{
+        socket.emit("getData", value.get(key));
+    });
   });
 });
 
-function writeIntoDb(key, value)
-{
-  // ...
+function writeIntoDb(key, value) {
+  database.run("INSERT INTO notes (key, value) VALUES (?,?)", [key, value], (err) => {
+    if (err) {
+      console.log(err.message);
+    }
+  });
 }
 
-function readDatafromDb(key)
-{
-  //  ...
+function readDatafromDb(key) {
+  return new Promise((resolve, reject) => {
+    database.get("SELECT * FROM notes WHERE notes.key = ?", [key], (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
 }
