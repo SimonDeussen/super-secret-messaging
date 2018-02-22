@@ -7,6 +7,6 @@
 
 (enable-console-print!)
 
-(println "geh mal duschen marius!")
+(println "Hello clojurescript!")
 
 (js-invoke js/socket "emit" "hello" "clojure")
