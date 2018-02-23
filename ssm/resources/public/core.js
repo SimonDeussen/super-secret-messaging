@@ -28925,7 +28925,7 @@ ssm.core.emitSocket = function emitSocket(socketName, msg) {
   return cljs.core.js_invoke.call(null, socket, "emit", socketName, msg);
 };
 ssm.core.hash_md5 = function hash_md5(input) {
-  return Crypt.HASH.sha1(input).toString();
+  return Crypt.HASH.sha256(input).toString();
 };
 ssm.core.encrypt = function encrypt(input, key) {
   return Crypt.AES.encrypt(input, key);

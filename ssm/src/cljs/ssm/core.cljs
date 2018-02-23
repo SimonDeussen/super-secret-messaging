@@ -10,17 +10,12 @@
 
   (defn emitSocket [socketName msg]
     (js-invoke js/socket "emit" socketName msg))
-    ;
-    ; /*** encrypt */
-    ; var ciphertext = Crypt.AES.encrypt("plaintext");
-    ; console.log(ciphertext);
 
 (defn hash-md5 [input]
   (-> js/Crypt
     (.-HASH)
-    (.sha1 input)
+    (.sha256 input)
     (.toString)))
-
 
 (defn encrypt [input key]
   (-> js/Crypt
