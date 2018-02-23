@@ -1,2 +1,2 @@
-./node_modules/*
-./src/transit-cljs-master/*
+/node_modules/*
+/src/transit-cljs-master/*
