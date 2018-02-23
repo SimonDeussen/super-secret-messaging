@@ -63,11 +63,21 @@ io.on('connection', function(socket)
     writeIntoDb(key, value);
   });
 
-  socket.on("requestData", function(msg)
-  {
+  socket.on("containsMessage", function(msg) {
     let key = msg.key;
-    readDatafromDb(key).then((value) =>{
-        socket.emit("getData", value.get(key));
+    readDatafromDb(key).then((value) => {
+      if (value == null) {
+        socket.emit("isInDatabase", "true");
+      }
+      socket.emit("isInDatabase", "false");
+    });
+  });
+
+  socket.on("requestData", function(msg) {
+    let key = msg.key;
+    readDatafromDb(key).then((value) => {
+      socket.emit("getData", value.get(key));
+      deleteMessageInDb(key);
     });
   });
 
@@ -94,5 +104,13 @@ function readDatafromDb(key) {
         resolve(row);
       }
     });
+  });
+}
+
+function deleteMessageInDb(key) {
+  database.run("DELETE FROM notes WHERE notes.key = ?", [key], (err) => {
+    if (err) {
+      console.log(err);
+    }
   });
 }
