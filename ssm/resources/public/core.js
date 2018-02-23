@@ -28928,7 +28928,7 @@ ssm.core.hash_md5 = function hash_md5(input) {
   return Crypt.HASH.sha256(input).toString();
 };
 ssm.core.build_hash = function build_hash(input) {
-  return ssm.core.hash_md5.call(null, [cljs.core.str(input), cljs.core.str(cljs.core.js_invoke.call(null, Date, "now"))].join(""));
+  return ssm.core.hash_md5.call(null, [cljs.core.str(input), cljs.core.str(cljs.core.js_invoke.call(null, Date, "now")), cljs.core.str(navigator["userAgent"])].join(""));
 };
 ssm.core.encrypt = function encrypt(input, key) {
   return Crypt.AES.encrypt(input, key);

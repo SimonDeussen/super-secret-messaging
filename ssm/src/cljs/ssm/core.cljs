@@ -21,7 +21,8 @@
   (hash-md5
     (str
       input
-      (js-invoke js/Date "now"))))
+      (js-invoke js/Date "now")
+      (aget js/navigator "userAgent"))))
 
 (defn encrypt [input key]
   (-> js/Crypt
@@ -78,34 +79,32 @@
 
 (add-click "submit" dummy-click)
 
+(comment "
+TODO
 
-  ;
-  ; (comment "
-  ; TODO
-  ;
-  ; SAVE
-  ;
-  ; getMessage() DONE
-  ;   ret message
-  ;
-  ; encryptMessage(message)
-  ;   ret key
-  ;       cmessage
-  ;
-  ; hashMessage(cmessage)
-  ;   ret dbKey
-  ;
-  ; saveMessage(dbkey, cmessage)
-  ;
-  ; GET
-  ;
-  ; splitUrl()
-  ;   ret dkbey
-  ;       key
-  ;
-  ; getDataAndDelete(dkbey)
-  ;   ret cmessage
-  ;
-  ; decryptMessage(key, cmessage)
-  ;   ret message
-  ; ")
+SAVE
+
+getMessage() DONE
+  ret message
+
+encryptMessage(message)
+  ret key
+      cmessage
+
+hashMessage(cmessage)
+  ret dbKey
+
+saveMessage(dbkey, cmessage)
+
+GET
+
+splitUrl()
+  ret dkbey
+      key
+
+getDataAndDelete(dkbey)
+  ret cmessage
+
+decryptMessage(key, cmessage)
+  ret message
+")
