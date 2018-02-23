@@ -1,1 +1,3 @@
 ssm/node_modules/*
+/src/transit-cljs-master/*
+ssm/database.db
