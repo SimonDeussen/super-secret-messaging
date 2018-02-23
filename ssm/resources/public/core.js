@@ -28921,11 +28921,14 @@ goog.require("goog.dom");
 cljs.core.enable_console_print_BANG_.call(null);
 cljs.core.println.call(null, "Hello clojurescript!");
 cljs.core.js_invoke.call(null, socket, "emit", "hello", "clojure");
-ssm.core.emitSocket = function emitSocket(socketName, msg) {
+ssm.core.emit_socket = function emit_socket(socketName, msg) {
   return cljs.core.js_invoke.call(null, socket, "emit", socketName, msg);
 };
 ssm.core.hash_md5 = function hash_md5(input) {
   return Crypt.HASH.sha256(input).toString();
+};
+ssm.core.build_hash = function build_hash(input) {
+  return ssm.core.hash_md5.call(null, [cljs.core.str(input), cljs.core.str(cljs.core.js_invoke.call(null, Date, "now"))].join(""));
 };
 ssm.core.encrypt = function encrypt(input, key) {
   return Crypt.AES.encrypt(input, key);
@@ -28933,25 +28936,24 @@ ssm.core.encrypt = function encrypt(input, key) {
 ssm.core.decrypt = function decrypt(input, key) {
   return Crypt.AES.decrypt(input, key);
 };
-ssm.core.my_msg = "blablablab";
-ssm.core.my_key = ssm.core.hash_md5.call(null, ssm.core.my_msg);
-ssm.core.my_secret = ssm.core.encrypt.call(null, ssm.core.my_msg, ssm.core.my_key);
-ssm.core.my_plain = ssm.core.decrypt.call(null, ssm.core.my_secret, ssm.core.my_key);
-cljs.core.println.call(null, ssm.core.my_msg);
-cljs.core.println.call(null, ssm.core.my_key);
-cljs.core.println.call(null, ssm.core.my_secret);
-cljs.core.println.call(null, ssm.core.my_plain);
-ssm.core.getTextContent = function getTextContent(id) {
+ssm.core.get_text_content = function get_text_content(id) {
   return document.getElementById(id).value;
 };
-ssm.core.getElement = function getElement(id) {
+ssm.core.get_element = function get_element(id) {
   return document.getElementById(id);
 };
-ssm.core.addClick = function addClick(id, handler) {
-  return ssm.core.getElement.call(null, id).addEventListener("click", handler);
+ssm.core.encrypt_my_message = function encrypt_my_message() {
+  ssm.core.my_msg = ssm.core.get_text_content.call(null, "textInput");
+  ssm.core.my_hash = ssm.core.build_hash.call(null, ssm.core.my_msg);
+  ssm.core.my_db_key = cljs.core.subs.call(null, ssm.core.my_hash, 0, 12);
+  ssm.core.my_key = cljs.core.subs.call(null, ssm.core.my_hash, 12, 64);
+  ssm.core.my_secret = ssm.core.encrypt.call(null, ssm.core.my_msg, ssm.core.my_key);
+  return[cljs.core.str(ssm.core.my_db_key), cljs.core.str("%"), cljs.core.str(ssm.core.my_secret)].join("");
 };
-ssm.core.dummyClick = function dummyClick() {
-  ssm.core.emitSocket.call(null, "hello", ssm.core.getTextContent.call(null, "textInput"));
-  return cljs.core.println.call(null, ssm.core.getTextContent.call(null, "textInput"));
+ssm.core.add_click = function add_click(id, handler) {
+  return ssm.core.get_element.call(null, id).addEventListener("click", handler);
 };
-ssm.core.addClick.call(null, "submit", ssm.core.dummyClick);
+ssm.core.dummy_click = function dummy_click() {
+  return ssm.core.emit_socket.call(null, "writeIntoDb", ssm.core.encrypt_my_message.call(null));
+};
+ssm.core.add_click.call(null, "submit", ssm.core.dummy_click);

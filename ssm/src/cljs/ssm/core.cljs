@@ -1,21 +1,27 @@
-  (ns ssm.core
-    (:require   [goog.dom :as dom]
+(ns ssm.core
+  (:require   [goog.dom :as dom]
+               ))
 
-                 ))
+(enable-console-print!)
 
-  (enable-console-print!)
+(println "Hello clojurescript!")
+(js-invoke js/socket "emit" "hello" "clojure")
 
-  (println "Hello clojurescript!")
-  (js-invoke js/socket "emit" "hello" "clojure")
+(defn emit-socket [socketName msg]
+  (js-invoke js/socket "emit" socketName msg))
 
-  (defn emitSocket [socketName msg]
-    (js-invoke js/socket "emit" socketName msg))
 
 (defn hash-md5 [input]
   (-> js/Crypt
     (.-HASH)
     (.sha256 input)
     (.toString)))
+
+(defn build-hash [input]
+  (hash-md5
+    (str
+      input
+      (js-invoke js/Date "now"))))
 
 (defn encrypt [input key]
   (-> js/Crypt
@@ -27,65 +33,79 @@
     (.-AES)
     (.decrypt input key)))
 
-(def my-msg "blablablab")
-(def my-key (hash-md5 my-msg))
-(def my-secret (encrypt my-msg my-key))
-(def my-plain (decrypt my-secret my-key))
-
-(println my-msg)
-(println my-key)
-(println my-secret)
-(println my-plain)
-
-  (defn getTextContent [id]
-    (-> js/document
-      (.getElementById id)
-      (.-value)))
-
-  (defn getElement [id]
-    (-> js/document
-      (.getElementById id)))
-
-
-  (defn addClick [id handler]
-    (.addEventListener (getElement id) "click" handler))
-
-  (defn dummyClick []
-    (emitSocket
-      "hello"
-      (getTextContent "textInput"))
-    (println (getTextContent "textInput")))
-
-  (addClick "submit" dummyClick)
+; (def my-msg "blablabssslab")
+; (def my-hash (hash-md5 my-msg))
+; (def my-db-key (subs my-hash 0 12))
+; (def my-key (subs my-hash 12 64))
+; (def my-secret (encrypt my-msg my-key))
+; (def my-plain (decrypt my-secret my-key))
+;
+; (println (str "plain text: " my-msg))
+; (println (str "my-hash:    " my-hash))
+; (println (str "my-key:     " my-key))
+; (println (str "my-db-key:  " my-db-key))
+; (println (str "encrypted:  " my-secret))
+; (println (str "decrypted:  " my-plain))
 
 
 
-  (comment "
-  TODO
+(defn get-text-content [id]
+  (-> js/document
+    (.getElementById id)
+    (.-value)))
 
-  SAVE
+(defn get-element [id]
+  (-> js/document
+    (.getElementById id)))
 
-  getMessage() DONE
-    ret message
+(defn encrypt-my-message []
+  (def my-msg (get-text-content "textInput"))
+  (def my-hash (build-hash my-msg))
+  (def my-db-key (subs my-hash 0 12))
+  (def my-key (subs my-hash 12 64))
+  (def my-secret (encrypt my-msg my-key))
+  (str my-db-key "%" my-secret)
+  )
 
-  encryptMessage(message)
-    ret key
-        cmessage
 
-  hashMessage(cmessage)
-    ret dbKey
+(defn add-click [id handler]
+  (.addEventListener (get-element id) "click" handler))
 
-  saveMessage(dbkey, cmessage)
+(defn dummy-click []
+  (emit-socket
+    "writeIntoDb"
+    (encrypt-my-message)))
 
-  GET
+(add-click "submit" dummy-click)
 
-  splitUrl()
-    ret dkbey
-        key
 
-  getDataAndDelete(dkbey)
-    ret cmessage
-
-  decryptMessage(key, cmessage)
-    ret message
-  ")
+  ;
+  ; (comment "
+  ; TODO
+  ;
+  ; SAVE
+  ;
+  ; getMessage() DONE
+  ;   ret message
+  ;
+  ; encryptMessage(message)
+  ;   ret key
+  ;       cmessage
+  ;
+  ; hashMessage(cmessage)
+  ;   ret dbKey
+  ;
+  ; saveMessage(dbkey, cmessage)
+  ;
+  ; GET
+  ;
+  ; splitUrl()
+  ;   ret dkbey
+  ;       key
+  ;
+  ; getDataAndDelete(dkbey)
+  ;   ret cmessage
+  ;
+  ; decryptMessage(key, cmessage)
+  ;   ret message
+  ; ")

@@ -45,10 +45,14 @@ io.on('connection', function(socket)
 
   socket.on("writeIntoDb", function(msg)
   {
-    let key = msg.key;
-    let value = msg.value;
+    let key = msg.split("%")[0];
+    let value = msg.split("%")[1];
 
-    writeIntoDb(key, value);
+    console.log("db-key: " + key);
+    console.log("msg: " + value);
+    // let key = msg.key;
+    // let value = msg.value;
+    // writeIntoDb(key, value);
   });
 
   socket.on("requestData", function(msg)
