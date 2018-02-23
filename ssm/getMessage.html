@@ -3,32 +3,33 @@
   <head>
     <title>Supre secret messaging</title>
     <link rel="stylesheet" href=".\public\style.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:200,200i,600,600i,800,800i" rel="stylesheet">
 
   </head>
 
   <body>
-
     <div class="navbar">
-      <div class="logo-wrapper">
-        <img src="./public/logo.svg" alt="Super secret messaging"/>
+      <div class="headline-wrapper">
+        <h1>sharing self destructing notes made easy</h1>
       </div>
     </div>
-
     <div class="main-wrapper">
       <div class="inner">
-        <div class="upper-part">
-          <h1 class="hidden" id="message-found-headline">get your super secret message here</h1>
-          <h1 class="hidden" id="message-not-found-headline">we didnt find your message</h1>
-
-        </div>
-        <div class="lower-part">
-            <span class="hidden" id="message-found-text">WARNING! showing the message deletes the message</span>
-            <button class="hidden" id="show-button">show me the message!</button>
+       <div class="lower-part">
+        <div  id="link-wrapper">
+            <h1 class="hidden" id="message-not-found-headline">no message found</h1>
+            <span class="hidden" id="message-found-text">WARNING! you can only watch this once...</span>
+            <button class="hidden" id="show-button">okay, show me!</button>
             <span id="message"></span>
+          </div>
+
+          <div class="button-wrapper">
+            <button class="" id="go-to-home" onclick="location.href = 'http://localhost:3000'">send another link</button>
+          </div>
         </div>
       </div>
+      </div>
 
-    </div>
 
     <button id="show-button">
 

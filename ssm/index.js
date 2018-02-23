@@ -31,10 +31,10 @@ app.get(/[//].{12}[%].{52}$/, function(req, res)
   res.sendFile(__dirname + '/getMessage.html');
 });
 
-app.get(/.*/, function(req, res)
-{
-  res.sendFile(__dirname + '/notFound.html');
-});
+// app.get(/.*/, function(req, res)
+// {
+//   res.sendFile(__dirname + '/notFound.html');
+// });
 
 
 http.listen(port, function()
@@ -57,14 +57,14 @@ io.on('connection', function(socket)
   socket.on("writeIntoDb", function(msg)
   {
     let key = msg.split("%")[0];
-    let value = msg.split("%")[1];
+    let value = msg.split("%")[1].substring(0,1000);
     console.log("db-key: " + key);
     console.log("msg: " + value);
     writeIntoDb(key, value);
   });
 
   socket.on("containsMessage", function(msg) {
-    console.log(msg)
+    console.log("contains " + msg)
     let key = msg;
     readDatafromDb(key).then((result) => {
       if (result != null) {

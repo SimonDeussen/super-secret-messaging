@@ -3,28 +3,32 @@
   <head>
     <title>Supre secret messaging</title>
     <link rel="stylesheet" href=".\public\style.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans:200,200i,600,600i,800,800i" rel="stylesheet">
 
   </head>
 
   <body>
+
     <div class="navbar">
-      <div class="logo-wrapper">
-        <img src="./public/logo.svg" alt="Super secret messaging"/>
+      <div class="headline-wrapper">
+        <h1>sharing self destructing notes made easy</h1>
       </div>
     </div>
 
     <div class="main-wrapper">
       <div class="inner">
-        <div class="upper-part">
-          <h1>write your super secret message here</h1>
-        </div>
         <div class="lower-part">
-            <textarea name="message" id="textInput"></textarea>
-            <button id="submit">Send this shit</button>
-            <a id="result-url"></a>
+            <textarea name="message" maxlength="1000" id="textInput" placeholder="write your secure note here"></textarea>
+            <div class="hidden" id="link-wrapper">
+              <a id="result-url"></a>
+              <span id="doNotForget">if you lose this link the message is gone!</span>
+            </div>
+            <div class="button-wrapper">
+              <button id="submit">safe & get share link</button>
+              <button class="hidden" id="go-to-home" onclick="location.reload()">send another link</button>
+            </div>
         </div>
       </div>
-
     </div>
 
     <div class="hidden" id="state">save-message</div>

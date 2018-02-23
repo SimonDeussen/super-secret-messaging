@@ -29121,6 +29121,9 @@ goog.require("clojure.string");
 goog.require("goog.dom");
 goog.require("goog.dom");
 cljs.core.enable_console_print_BANG_.call(null);
+ssm.core.seperator = function seperator() {
+  return "%";
+};
 cljs.core.println.call(null, "Hello clojurescript!");
 cljs.core.js_invoke.call(null, socket, "emit", "hello", "clojure");
 ssm.core.emit_socket = function emit_socket(socket_name, msg) {
@@ -29138,11 +29141,17 @@ ssm.core.get_text_content = function get_text_content(id) {
 ssm.core.get_inner_html = function get_inner_html(id) {
   return document.getElementById(id).innerHTML;
 };
+ssm.core.remove_element = function remove_element(id) {
+  return document.getElementById(id).remove();
+};
 ssm.core.get_element = function get_element(id) {
   return document.getElementById(id);
 };
 ssm.core.delete_hidden_class = function delete_hidden_class(id) {
   return window.eval([cljs.core.str("document.getElementById('"), cljs.core.str(id), cljs.core.str("').classList.remove('hidden')")].join(""));
+};
+ssm.core.hide_element = function hide_element(id) {
+  return window.eval([cljs.core.str("document.getElementById('"), cljs.core.str(id), cljs.core.str("').classList.add('hidden')")].join(""));
 };
 ssm.core.get_location = function get_location() {
   return location["href"];
@@ -29160,7 +29169,6 @@ ssm.core.has_valid_length = function has_valid_length() {
 };
 cljs.core.println.call(null, ssm.core.get_location.call(null));
 ssm.core.show_success = function show_success() {
-  ssm.core.delete_hidden_class.call(null, "message-found-headline");
   ssm.core.delete_hidden_class.call(null, "message-found-text");
   return ssm.core.delete_hidden_class.call(null, "show-button");
 };
@@ -29188,26 +29196,30 @@ ssm.core.add_click = function add_click(id, handler) {
   return ssm.core.get_element.call(null, id).addEventListener("click", handler);
 };
 ssm.core.display_url = function display_url(url) {
-  ssm.core.url_string = [cljs.core.str(ssm.core.get_location.call(null)), cljs.core.str(url.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827))), cljs.core.str("%"), cljs.core.str(url.call(null, new cljs.core.Keyword(null, "key", "key", -1516042587)))].join("");
+  ssm.core.url_string = [cljs.core.str(ssm.core.get_location.call(null)), cljs.core.str(url.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827))), cljs.core.str(ssm.core.seperator.call(null)), cljs.core.str(url.call(null, new cljs.core.Keyword(null, "key", "key", -1516042587)))].join("");
   cljs.core.println.call(null, ssm.core.url_string);
-  return ssm.core.get_element.call(null, "result-url")["textContent"] = ssm.core.url_string;
+  ssm.core.remove_element.call(null, "textInput");
+  ssm.core.remove_element.call(null, "submit");
+  ssm.core.delete_hidden_class.call(null, "go-to-home");
+  ssm.core.delete_hidden_class.call(null, "link-wrapper");
+  ssm.core.get_element.call(null, "result-url")["textContent"] = ssm.core.url_string;
+  return document.getElementById("result-url").setAttribute("href", ssm.core.url_string);
 };
 ssm.core.button_click = function button_click() {
   ssm.core.encrypted_msg = ssm.core.encrypt_my_message.call(null);
-  cljs.core.println.call(null, [cljs.core.str("click db "), cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827)))].join(""));
-  cljs.core.println.call(null, [cljs.core.str("click key "), cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "key", "key", -1516042587)))].join(""));
-  cljs.core.println.call(null, [cljs.core.str("click secret "), cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "secret", "secret", 618547054)))].join(""));
   ssm.core.display_url.call(null, ssm.core.encrypted_msg);
-  return ssm.core.emit_socket.call(null, "writeIntoDb", [cljs.core.str([cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827)))].join("")), cljs.core.str("%"), cljs.core.str([cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "secret", "secret", 618547054)))].join(""))].join(""));
+  cljs.core.println.call(null, [cljs.core.str([cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827)))].join("")), cljs.core.str(ssm.core.seperator.call(null)), cljs.core.str([cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "secret", "secret", 618547054)))].join(""))].join(""));
+  return ssm.core.emit_socket.call(null, "writeIntoDb", [cljs.core.str([cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827)))].join("")), cljs.core.str(ssm.core.seperator.call(null)), cljs.core.str([cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "secret", "secret", 618547054)))].join(""))].join(""));
 };
 ssm.core.message_exists = function message_exists() {
   ssm.core.show_success.call(null);
   return ssm.core.get_element.call(null, "show-button").addEventListener("click", function() {
-    return ssm.core.emit_socket.call(null, "requestData", cljs.core.first.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), /%/)));
+    return ssm.core.emit_socket.call(null, "requestData", cljs.core.first.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), ssm.core.seperator.call(null))));
   });
 };
 ssm.core.message_doesnt_exists = function message_doesnt_exists() {
-  return cljs.core.println.call(null, "oh nooooooo");
+  cljs.core.println.call(null, "oh nooooooo");
+  return ssm.core.delete_hidden_class.call(null, "message-not-found-headline");
 };
 ssm.core.message_handler = function message_handler(msg) {
   if (cljs.core._EQ_.call(null, msg, "true")) {
@@ -29226,14 +29238,17 @@ ssm.core.todo_save = function todo_save() {
 };
 ssm.core.todo_get = function todo_get() {
   cljs.core.println.call(null, "get");
-  return ssm.core.emit_socket.call(null, "containsMessage", cljs.core.first.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), /%/)));
+  return ssm.core.emit_socket.call(null, "containsMessage", cljs.core.first.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), ssm.core.seperator.call(null))));
 };
 ssm.core.on_socket.call(null, "isInDatabase", function(msg) {
   return ssm.core.message_handler.call(null, msg);
 });
 ssm.core.on_socket.call(null, "getData", function(msg) {
   cljs.core.println.call(null, msg);
-  return ssm.core.get_element.call(null, "message")["textContent"] = ssm.core.decrypt.call(null, msg, cljs.core.last.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), /%/)));
+  ssm.core.hide_element.call(null, "show-button");
+  ssm.core.hide_element.call(null, "message-found-text");
+  ssm.core.delete_hidden_class.call(null, "go-to-home");
+  return ssm.core.get_element.call(null, "message")["textContent"] = ssm.core.decrypt.call(null, msg, cljs.core.last.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), ssm.core.seperator.call(null))));
 });
 ssm.core.do_my_stuff = function do_my_stuff() {
   if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "save-message")) {

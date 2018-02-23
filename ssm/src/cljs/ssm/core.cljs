@@ -5,6 +5,9 @@
 
 (enable-console-print!)
 
+(defn seperator [] "%")
+
+
 (println "Hello clojurescript!")
 (js-invoke js/socket "emit" "hello" "clojure")
 
@@ -26,6 +29,11 @@
     (.getElementById id)
     (.-innerHTML)))
 
+(defn remove-element [id]
+  (-> js/document
+    (.getElementById id)
+    (.remove)))
+
 (defn get-element [id]
   (-> js/document
     (.getElementById id)))
@@ -33,6 +41,10 @@
 (defn delete-hidden-class [id]
   (-> js/window
     (.eval (str "document.getElementById('" id "').classList.remove('hidden')"))))
+
+(defn hide-element [id]
+  (-> js/window
+    (.eval (str "document.getElementById('" id "').classList.add('hidden')"))))
 
 
 (defn get-location []
@@ -51,7 +63,6 @@
 (println (get-location))
 
 (defn show-success []
-  (delete-hidden-class "message-found-headline")
   (delete-hidden-class "message-found-text")
   (delete-hidden-class "show-button")
   )
@@ -107,31 +118,38 @@
   (.addEventListener (get-element id) "click" handler))
 
 (defn display-url [url]
-  (def url-string (str (get-location) (url :db-key) "%" (url :key)))
+  (def url-string (str (get-location) (url :db-key) (seperator) (url :key)))
   (println url-string)
-  (aset (get-element "result-url") "textContent" url-string))
+  (remove-element "textInput")
+  (remove-element "submit")
+  (delete-hidden-class "go-to-home")
+  (delete-hidden-class "link-wrapper")
+  (aset (get-element "result-url") "textContent" url-string)
+  (-> js/document
+    (.getElementById "result-url")
+    (.setAttribute "href" url-string)))
 
 
 (defn button-click []
   (def encrypted-msg (encrypt-my-message))
-  (println (str "click db " (encrypted-msg :db-key)))
-  (println (str "click key " (encrypted-msg :key)))
-  (println (str "click secret " (encrypted-msg :secret)))
   (display-url encrypted-msg)
+  (println (str (str (encrypted-msg :db-key)) (seperator) (str (encrypted-msg :secret)) ))
+
   (emit-socket
     "writeIntoDb"
-    (str (str (encrypted-msg :db-key)) "%" (str (encrypted-msg :secret)) )))
+    (str (str (encrypted-msg :db-key)) (seperator) (str (encrypted-msg :secret)) )))
 
 (defn message-exists []
   (show-success)
   (.addEventListener (get-element "show-button") "click"
     (fn []
-      (emit-socket "requestData" (first (str/split (get-url-hash) #"%")))
+      (emit-socket "requestData" (first (str/split (get-url-hash) (seperator))))
       ))
   )
 
 (defn message-doesnt-exists []
-  (println "oh nooooooo"))
+  (println "oh nooooooo")
+  (delete-hidden-class "message-not-found-headline"))
 
 (defn message-handler [msg]
   (cond
@@ -144,7 +162,7 @@
 
 (defn todo-get []
   (println "get")
-  (emit-socket "containsMessage" (first (str/split (get-url-hash) #"%"))))
+  (emit-socket "containsMessage" (first (str/split (get-url-hash) (seperator)))))
 
 (on-socket "isInDatabase"
   (fn [msg]
@@ -153,7 +171,10 @@
 (on-socket "getData"
   (fn [msg]
     (println msg)
-    (aset (get-element "message") "textContent" (decrypt msg (last (str/split (get-url-hash) #"%"))))))
+    (hide-element "show-button")
+    (hide-element "message-found-text")
+    (delete-hidden-class "go-to-home")
+    (aset (get-element "message") "textContent" (decrypt msg (last (str/split (get-url-hash) (seperator)))))))
 
 (defn do-my-stuff []
     (cond
