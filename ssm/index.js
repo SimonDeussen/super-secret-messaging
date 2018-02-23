@@ -26,7 +26,7 @@ app.get('/', function(req, res)
   res.sendFile(__dirname + '/saveMessage.html');
 });
 
-app.get(/.{12}%.{52}$/, function(req, res)
+app.get(/[//].{12}[%].{52}$/, function(req, res)
 {
   res.sendFile(__dirname + '/getMessage.html');
 });

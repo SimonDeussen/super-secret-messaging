@@ -10,6 +10,33 @@
 (defn emit-socket [socketName msg]
   (js-invoke js/socket "emit" socketName msg))
 
+(defn get-text-content [id]
+  (-> js/document
+    (.getElementById id)
+    (.-value)))
+
+(defn get-inner-html [id]
+  (-> js/document
+    (.getElementById id)
+    (.-innerHTML)))
+
+(defn get-element [id]
+  (-> js/document
+    (.getElementById id)))
+
+(defn get-location []
+  (aget js/location "href"))
+
+(println (get-location))
+
+(defn do-my-stuff []
+    (cond
+      (= (str (get-inner-html "state")) "save-message") (println "save")
+      (= (str (get-inner-html "state")) "get-message") (println "get")
+      :else (println "no")))
+
+(do-my-stuff)
+
 (defn hash-md5 [input]
   (-> js/Crypt
     (.-HASH)
@@ -46,17 +73,6 @@
 ; (println (str "my-db-key:  " my-db-key))
 ; (println (str "encrypted:  " my-secret))
 ; (println (str "decrypted:  " my-plain))
-
-
-
-(defn get-text-content [id]
-  (-> js/document
-    (.getElementById id)
-    (.-value)))
-
-(defn get-element [id]
-  (-> js/document
-    (.getElementById id)))
 
 (defn encrypt-my-message []
   (def my-msg (get-text-content "textInput"))

@@ -28924,6 +28924,31 @@ cljs.core.js_invoke.call(null, socket, "emit", "hello", "clojure");
 ssm.core.emit_socket = function emit_socket(socketName, msg) {
   return cljs.core.js_invoke.call(null, socket, "emit", socketName, msg);
 };
+ssm.core.get_text_content = function get_text_content(id) {
+  return document.getElementById(id).value;
+};
+ssm.core.get_inner_html = function get_inner_html(id) {
+  return document.getElementById(id).innerHTML;
+};
+ssm.core.get_element = function get_element(id) {
+  return document.getElementById(id);
+};
+ssm.core.get_location = function get_location() {
+  return location["href"];
+};
+cljs.core.println.call(null, ssm.core.get_location.call(null));
+ssm.core.do_my_stuff = function do_my_stuff() {
+  if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "save-message")) {
+    return cljs.core.println.call(null, "save");
+  } else {
+    if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "get-message")) {
+      return cljs.core.println.call(null, "get");
+    } else {
+      return cljs.core.println.call(null, "no");
+    }
+  }
+};
+ssm.core.do_my_stuff.call(null);
 ssm.core.hash_md5 = function hash_md5(input) {
   return Crypt.HASH.sha256(input).toString();
 };
@@ -28935,12 +28960,6 @@ ssm.core.encrypt = function encrypt(input, key) {
 };
 ssm.core.decrypt = function decrypt(input, key) {
   return Crypt.AES.decrypt(input, key);
-};
-ssm.core.get_text_content = function get_text_content(id) {
-  return document.getElementById(id).value;
-};
-ssm.core.get_element = function get_element(id) {
-  return document.getElementById(id);
 };
 ssm.core.encrypt_my_message = function encrypt_my_message() {
   ssm.core.my_msg = ssm.core.get_text_content.call(null, "textInput");
