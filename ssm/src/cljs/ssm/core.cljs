@@ -64,6 +64,7 @@
   (def my-db-key (subs my-hash 0 12))
   (def my-key (subs my-hash 12 64))
   (def my-secret (encrypt my-msg my-key))
+  (println (str my-db-key "%" my-key))
   (str my-db-key "%" my-secret)
   )
 

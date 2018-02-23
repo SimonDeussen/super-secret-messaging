@@ -23,8 +23,19 @@ app.use("/resources/public", express.static(__dirname + "/resources/public"));
 //serving html
 app.get('/', function(req, res)
 {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/saveMessage.html');
 });
+
+app.get(/.{12}%.{52}$/, function(req, res)
+{
+  res.sendFile(__dirname + '/getMessage.html');
+});
+
+app.get(/.*/, function(req, res)
+{
+  res.sendFile(__dirname + '/notFound.html');
+});
+
 
 http.listen(port, function()
 {

@@ -28948,6 +28948,7 @@ ssm.core.encrypt_my_message = function encrypt_my_message() {
   ssm.core.my_db_key = cljs.core.subs.call(null, ssm.core.my_hash, 0, 12);
   ssm.core.my_key = cljs.core.subs.call(null, ssm.core.my_hash, 12, 64);
   ssm.core.my_secret = ssm.core.encrypt.call(null, ssm.core.my_msg, ssm.core.my_key);
+  cljs.core.println.call(null, [cljs.core.str(ssm.core.my_db_key), cljs.core.str("%"), cljs.core.str(ssm.core.my_key)].join(""));
   return[cljs.core.str(ssm.core.my_db_key), cljs.core.str("%"), cljs.core.str(ssm.core.my_secret)].join("");
 };
 ssm.core.add_click = function add_click(id, handler) {
