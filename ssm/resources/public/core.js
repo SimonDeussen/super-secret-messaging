@@ -28951,18 +28951,6 @@ ssm.core.show_success = function show_success() {
   ssm.core.delete_hidden_class.call(null, "message-found-text");
   return ssm.core.delete_hidden_class.call(null, "show-button");
 };
-ssm.core.do_my_stuff = function do_my_stuff() {
-  if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "save-message")) {
-    return cljs.core.println.call(null, "save");
-  } else {
-    if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "get-message")) {
-      return ssm.core.show_success.call(null);
-    } else {
-      return cljs.core.println.call(null, "no");
-    }
-  }
-};
-ssm.core.do_my_stuff.call(null);
 ssm.core.hash_md5 = function hash_md5(input) {
   return Crypt.HASH.sha256(input).toString();
 };
@@ -28990,4 +28978,23 @@ ssm.core.add_click = function add_click(id, handler) {
 ssm.core.dummy_click = function dummy_click() {
   return ssm.core.emit_socket.call(null, "writeIntoDb", ssm.core.encrypt_my_message.call(null));
 };
-ssm.core.add_click.call(null, "submit", ssm.core.dummy_click);
+ssm.core.todo_save = function todo_save() {
+  cljs.core.println.call(null, "save");
+  return ssm.core.add_click.call(null, "submit", ssm.core.dummy_click);
+};
+ssm.core.todo_get = function todo_get() {
+  cljs.core.println.call(null, "get");
+  return ssm.core.show_success.call(null);
+};
+ssm.core.do_my_stuff = function do_my_stuff() {
+  if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "save-message")) {
+    return ssm.core.todo_save.call(null);
+  } else {
+    if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "get-message")) {
+      return ssm.core.todo_get.call(null);
+    } else {
+      return cljs.core.println.call(null, "no");
+    }
+  }
+};
+ssm.core.do_my_stuff.call(null);

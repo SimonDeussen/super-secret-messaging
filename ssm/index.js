@@ -58,8 +58,8 @@ io.on('connection', function(socket)
   {
     let key = msg.split("%")[0];
     let value = msg.split("%")[1];
-    // console.log("db-key: " + key);
-    // console.log("msg: " + value);
+    console.log("db-key: " + key);
+    console.log("msg: " + value);
     writeIntoDb(key, value);
   });
 

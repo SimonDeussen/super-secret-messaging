@@ -45,14 +45,6 @@
   (delete-hidden-class "show-button")
   )
 
-(defn do-my-stuff []
-    (cond
-      (= (str (get-inner-html "state")) "save-message") (println "save")
-      (= (str (get-inner-html "state")) "get-message") (show-success)
-      :else (println "no")))
-
-(do-my-stuff)
-
 (defn hash-md5 [input]
   (-> js/Crypt
     (.-HASH)
@@ -109,7 +101,23 @@
     "writeIntoDb"
     (encrypt-my-message)))
 
-(add-click "submit" dummy-click)
+(defn todo-save []
+  (println "save")
+  (add-click "submit" dummy-click))
+
+(defn todo-get []
+  (println "get")
+  (show-success))
+
+(defn do-my-stuff []
+    (cond
+      (= (str (get-inner-html "state")) "save-message") (todo-save)
+      (= (str (get-inner-html "state")) "get-message") (todo-get)
+      :else (println "no")))
+
+(do-my-stuff)
+
+
 
 (comment "
 TODO
