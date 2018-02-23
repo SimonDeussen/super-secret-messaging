@@ -37,6 +37,16 @@
   (-> js/document
     (.getElementById "result-url")
     ))
+    
+(defn get-url-hash []
+      (println "hash")
+      (str (last (str/split (get-location) #"/"))))
+
+(defn has-valid-length []
+  (println "len")
+    (if
+      (= (count (get-url-hash)) 65) (println "right length")
+      ))
 
 (defn get-location []
   (aget js/location "href"))
