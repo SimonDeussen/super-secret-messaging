@@ -10,7 +10,6 @@
 (defn emit-socket [socketName msg]
   (js-invoke js/socket "emit" socketName msg))
 
-
 (defn hash-md5 [input]
   (-> js/Crypt
     (.-HASH)
