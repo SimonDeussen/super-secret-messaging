@@ -29233,7 +29233,7 @@ ssm.core.on_socket.call(null, "isInDatabase", function(msg) {
 });
 ssm.core.on_socket.call(null, "getData", function(msg) {
   cljs.core.println.call(null, msg);
-  return cljs.core.println.call(null, ssm.core.decrypt.call(null, msg, cljs.core.last.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), /%/))));
+  return ssm.core.get_element.call(null, "message")["textContent"] = ssm.core.decrypt.call(null, msg, cljs.core.last.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), /%/)));
 });
 ssm.core.do_my_stuff = function do_my_stuff() {
   if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "save-message")) {

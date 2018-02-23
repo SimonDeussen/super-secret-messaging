@@ -144,11 +144,6 @@
 
 (defn todo-get []
   (println "get")
-  ; (def db-key (first (str/split (get-url-hash) #"%")))
-  ; (def my-key (last (str/split (get-url-hash) #"%")))
-  ;
-  ; (println (str "dbkey" db-key))
-  ; (println (str "key" my-key))
   (emit-socket "containsMessage" (first (str/split (get-url-hash) #"%"))))
 
 (on-socket "isInDatabase"
@@ -158,7 +153,7 @@
 (on-socket "getData"
   (fn [msg]
     (println msg)
-    (println (decrypt msg (last (str/split (get-url-hash) #"%"))))))
+    (aset (get-element "message") "textContent" (decrypt msg (last (str/split (get-url-hash) #"%"))))))
 
 (defn do-my-stuff []
     (cond
