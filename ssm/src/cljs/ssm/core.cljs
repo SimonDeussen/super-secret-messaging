@@ -5,7 +5,7 @@
 
 (enable-console-print!)
 
-(defn seperator [] "%")
+(defn seperator [] ".")
 
 
 (println "Hello clojurescript!")

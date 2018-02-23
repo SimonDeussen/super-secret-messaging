@@ -29122,7 +29122,7 @@ goog.require("goog.dom");
 goog.require("goog.dom");
 cljs.core.enable_console_print_BANG_.call(null);
 ssm.core.seperator = function seperator() {
-  return "%";
+  return ".";
 };
 cljs.core.println.call(null, "Hello clojurescript!");
 cljs.core.js_invoke.call(null, socket, "emit", "hello", "clojure");

@@ -13,6 +13,8 @@ database.run("CREATE TABLE IF NOT EXISTS notes (key TEXT PRIMARY KEY, value TEXT
 const app = express();
 const port = 3000;
 
+const seperator = "."
+
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
 
@@ -26,15 +28,15 @@ app.get('/', function(req, res)
   res.sendFile(__dirname + '/saveMessage.html');
 });
 
-app.get(/[//].{12}[%].{52}$/, function(req, res)
+app.get(/[//].{12}[/.].{52}$/, function(req, res)
 {
   res.sendFile(__dirname + '/getMessage.html');
 });
 
-// app.get(/.*/, function(req, res)
-// {
-//   res.sendFile(__dirname + '/notFound.html');
-// });
+app.get(/.*/, function(req, res)
+{
+  res.sendFile(__dirname + '/notFound.html');
+});
 
 
 http.listen(port, function()
@@ -56,8 +58,8 @@ io.on('connection', function(socket)
 
   socket.on("writeIntoDb", function(msg)
   {
-    let key = msg.split("%")[0];
-    let value = msg.split("%")[1].substring(0,1000);
+    let key = msg.split(seperator)[0];
+    let value = msg.split(seperator)[1].substring(0,1000);
     console.log("db-key: " + key);
     console.log("msg: " + value);
     writeIntoDb(key, value);
