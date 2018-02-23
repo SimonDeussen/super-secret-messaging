@@ -28914,8 +28914,210 @@ cljs.core.special_symbol_QMARK_ = function special_symbol_QMARK_(x) {
   "letfn*", "letfn*", -110097810, null), null, new cljs.core.Symbol(null, "if", "if", 1181717262, null), null, new cljs.core.Symbol(null, "new", "new", -444906321, null), null, new cljs.core.Symbol(null, "ns", "ns", 2082130287, null), null, new cljs.core.Symbol(null, "deftype*", "deftype*", 962659890, null), null, new cljs.core.Symbol(null, "let*", "let*", 1920721458, null), null, new cljs.core.Symbol(null, "js*", "js*", -1134233646, null), null, new cljs.core.Symbol(null, "fn*", "fn*", -752876845, 
   null), null, new cljs.core.Symbol(null, "recur", "recur", 1202958259, null), null, new cljs.core.Symbol(null, "set!", "set!", 250714521, null), null, new cljs.core.Symbol(null, ".", ".", 1975675962, null), null, new cljs.core.Symbol(null, "quote", "quote", 1377916282, null), null, new cljs.core.Symbol(null, "throw", "throw", 595905694, null), null, new cljs.core.Symbol(null, "def", "def", 597100991, null), null], null), null), x);
 };
+goog.provide("clojure.string");
+goog.require("cljs.core");
+goog.require("goog.string.StringBuffer");
+goog.require("goog.string");
+goog.require("goog.string");
+clojure.string.seq_reverse = function seq_reverse(coll) {
+  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.List.EMPTY, coll);
+};
+clojure.string.re_surrogate_pair = new RegExp("([\\uD800-\\uDBFF])([\\uDC00-\\uDFFF])", "g");
+clojure.string.reverse = function reverse(s) {
+  return s.replace(clojure.string.re_surrogate_pair, "$2$1").split("").reverse().join("");
+};
+clojure.string.replace = function replace(s, match, replacement) {
+  if (typeof match === "string") {
+    return s.replace(new RegExp(goog.string.regExpEscape(match), "g"), replacement);
+  } else {
+    if (cljs.core.truth_(match.hasOwnProperty("source"))) {
+      return s.replace(new RegExp(match.source, "g"), replacement);
+    } else {
+      throw[cljs.core.str("Invalid match arg: "), cljs.core.str(match)].join("");
+    }
+  }
+};
+clojure.string.replace_first = function replace_first(s, match, replacement) {
+  return s.replace(match, replacement);
+};
+clojure.string.join = function() {
+  var join = null;
+  var join__1 = function(coll) {
+    return cljs.core.apply.call(null, cljs.core.str, coll);
+  };
+  var join__2 = function(separator, coll) {
+    return cljs.core.apply.call(null, cljs.core.str, cljs.core.interpose.call(null, separator, coll));
+  };
+  join = function(separator, coll) {
+    switch(arguments.length) {
+      case 1:
+        return join__1.call(this, separator);
+      case 2:
+        return join__2.call(this, separator, coll);
+    }
+    throw new Error("Invalid arity: " + arguments.length);
+  };
+  join.cljs$core$IFn$_invoke$arity$1 = join__1;
+  join.cljs$core$IFn$_invoke$arity$2 = join__2;
+  return join;
+}();
+clojure.string.upper_case = function upper_case(s) {
+  return s.toUpperCase();
+};
+clojure.string.lower_case = function lower_case(s) {
+  return s.toLowerCase();
+};
+clojure.string.capitalize = function capitalize(s) {
+  if (cljs.core.count.call(null, s) < 2) {
+    return clojure.string.upper_case.call(null, s);
+  } else {
+    return[cljs.core.str(clojure.string.upper_case.call(null, cljs.core.subs.call(null, s, 0, 1))), cljs.core.str(clojure.string.lower_case.call(null, cljs.core.subs.call(null, s, 1)))].join("");
+  }
+};
+clojure.string.pop_last_while_empty = function pop_last_while_empty(v) {
+  var v__$1 = v;
+  while (true) {
+    if (cljs.core._EQ_.call(null, "", cljs.core.peek.call(null, v__$1))) {
+      var G__5077 = cljs.core.pop.call(null, v__$1);
+      v__$1 = G__5077;
+      continue;
+    } else {
+      return v__$1;
+    }
+    break;
+  }
+};
+clojure.string.discard_trailing_if_needed = function discard_trailing_if_needed(limit, v) {
+  if (cljs.core._EQ_.call(null, 0, limit)) {
+    return clojure.string.pop_last_while_empty.call(null, v);
+  } else {
+    return v;
+  }
+};
+clojure.string.split_with_empty_regex = function split_with_empty_regex(s, limit) {
+  if (limit <= 0 || limit >= 2 + cljs.core.count.call(null, s)) {
+    return cljs.core.conj.call(null, cljs.core.vec.call(null, cljs.core.cons.call(null, "", cljs.core.map.call(null, cljs.core.str, cljs.core.seq.call(null, s)))), "");
+  } else {
+    var pred__5081 = cljs.core._EQ_;
+    var expr__5082 = limit;
+    if (cljs.core.truth_(pred__5081.call(null, 1, expr__5082))) {
+      return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [s], null);
+    } else {
+      if (cljs.core.truth_(pred__5081.call(null, 2, expr__5082))) {
+        return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["", s], null);
+      } else {
+        var c = limit - 2;
+        return cljs.core.conj.call(null, cljs.core.vec.call(null, cljs.core.cons.call(null, "", cljs.core.subvec.call(null, cljs.core.vec.call(null, cljs.core.map.call(null, cljs.core.str, cljs.core.seq.call(null, s))), 0, c))), cljs.core.subs.call(null, s, c));
+      }
+    }
+  }
+};
+clojure.string.split = function() {
+  var split = null;
+  var split__2 = function(s, re) {
+    return split.call(null, s, re, 0);
+  };
+  var split__3 = function(s, re, limit) {
+    return clojure.string.discard_trailing_if_needed.call(null, limit, cljs.core._EQ_.call(null, [cljs.core.str(re)].join(""), "/(?:)/") ? clojure.string.split_with_empty_regex.call(null, s, limit) : limit < 1 ? cljs.core.vec.call(null, [cljs.core.str(s)].join("").split(re)) : function() {
+      var s__$1 = s;
+      var limit__$1 = limit;
+      var parts = cljs.core.PersistentVector.EMPTY;
+      while (true) {
+        if (cljs.core._EQ_.call(null, limit__$1, 1)) {
+          return cljs.core.conj.call(null, parts, s__$1);
+        } else {
+          var temp__4124__auto__ = cljs.core.re_find.call(null, re, s__$1);
+          if (cljs.core.truth_(temp__4124__auto__)) {
+            var m = temp__4124__auto__;
+            var index = s__$1.indexOf(m);
+            var G__5084 = s__$1.substring(index + cljs.core.count.call(null, m));
+            var G__5085 = limit__$1 - 1;
+            var G__5086 = cljs.core.conj.call(null, parts, s__$1.substring(0, index));
+            s__$1 = G__5084;
+            limit__$1 = G__5085;
+            parts = G__5086;
+            continue;
+          } else {
+            return cljs.core.conj.call(null, parts, s__$1);
+          }
+        }
+        break;
+      }
+    }());
+  };
+  split = function(s, re, limit) {
+    switch(arguments.length) {
+      case 2:
+        return split__2.call(this, s, re);
+      case 3:
+        return split__3.call(this, s, re, limit);
+    }
+    throw new Error("Invalid arity: " + arguments.length);
+  };
+  split.cljs$core$IFn$_invoke$arity$2 = split__2;
+  split.cljs$core$IFn$_invoke$arity$3 = split__3;
+  return split;
+}();
+clojure.string.split_lines = function split_lines(s) {
+  return clojure.string.split.call(null, s, /\n|\r\n/);
+};
+clojure.string.trim = function trim(s) {
+  return goog.string.trim(s);
+};
+clojure.string.triml = function triml(s) {
+  return goog.string.trimLeft(s);
+};
+clojure.string.trimr = function trimr(s) {
+  return goog.string.trimRight(s);
+};
+clojure.string.trim_newline = function trim_newline(s) {
+  var index = s.length;
+  while (true) {
+    if (index === 0) {
+      return "";
+    } else {
+      var ch = cljs.core.get.call(null, s, index - 1);
+      if (cljs.core._EQ_.call(null, ch, "\n") || cljs.core._EQ_.call(null, ch, "\r")) {
+        var G__5087 = index - 1;
+        index = G__5087;
+        continue;
+      } else {
+        return s.substring(0, index);
+      }
+    }
+    break;
+  }
+};
+clojure.string.blank_QMARK_ = function blank_QMARK_(s) {
+  return goog.string.isEmptySafe(s);
+};
+clojure.string.escape = function escape__$1(s, cmap) {
+  var buffer = new goog.string.StringBuffer;
+  var length = s.length;
+  var index = 0;
+  while (true) {
+    if (cljs.core._EQ_.call(null, length, index)) {
+      return buffer.toString();
+    } else {
+      var ch = s.charAt(index);
+      var temp__4124__auto___5088 = cljs.core.get.call(null, cmap, ch);
+      if (cljs.core.truth_(temp__4124__auto___5088)) {
+        var replacement_5089 = temp__4124__auto___5088;
+        buffer.append([cljs.core.str(replacement_5089)].join(""));
+      } else {
+        buffer.append(ch);
+      }
+      var G__5090 = index + 1;
+      index = G__5090;
+      continue;
+    }
+    break;
+  }
+};
 goog.provide("ssm.core");
 goog.require("cljs.core");
+goog.require("clojure.string");
+goog.require("clojure.string");
 goog.require("goog.dom");
 goog.require("goog.dom");
 cljs.core.enable_console_print_BANG_.call(null);
@@ -28942,11 +29144,19 @@ ssm.core.get_element = function get_element(id) {
 ssm.core.delete_hidden_class = function delete_hidden_class(id) {
   return window.eval([cljs.core.str("document.getElementById('"), cljs.core.str(id), cljs.core.str("').classList.remove('hidden')")].join(""));
 };
-ssm.core.display_url = function display_url(url) {
-  return document.getElementById("result-url");
-};
 ssm.core.get_location = function get_location() {
   return location["href"];
+};
+ssm.core.get_url_hash = function get_url_hash() {
+  return[cljs.core.str(cljs.core.last.call(null, clojure.string.split.call(null, ssm.core.get_location.call(null), /\//)))].join("");
+};
+ssm.core.has_valid_length = function has_valid_length() {
+  cljs.core.println.call(null, "len");
+  if (cljs.core._EQ_.call(null, cljs.core.count.call(null, ssm.core.get_url_hash.call(null)), 65)) {
+    return cljs.core.println.call(null, "right length");
+  } else {
+    return null;
+  }
 };
 cljs.core.println.call(null, ssm.core.get_location.call(null));
 ssm.core.show_success = function show_success() {
@@ -28972,16 +29182,43 @@ ssm.core.encrypt_my_message = function encrypt_my_message() {
   ssm.core.my_db_key = cljs.core.subs.call(null, ssm.core.my_hash, 0, 12);
   ssm.core.my_key = cljs.core.subs.call(null, ssm.core.my_hash, 12, 64);
   ssm.core.my_secret = ssm.core.encrypt.call(null, ssm.core.my_msg, ssm.core.my_key);
-  cljs.core.println.call(null, [cljs.core.str(ssm.core.my_db_key), cljs.core.str("%"), cljs.core.str(ssm.core.my_key)].join(""));
-  return[cljs.core.str(ssm.core.my_db_key), cljs.core.str("%"), cljs.core.str(ssm.core.my_secret)].join("");
+  return new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, "key", "key", -1516042587), ssm.core.my_key, new cljs.core.Keyword(null, "db-key", "db-key", 761140827), ssm.core.my_db_key, new cljs.core.Keyword(null, "secret", "secret", 618547054), ssm.core.my_secret], null);
 };
 ssm.core.add_click = function add_click(id, handler) {
   return ssm.core.get_element.call(null, id).addEventListener("click", handler);
 };
+ssm.core.display_url = function display_url(url) {
+  ssm.core.url_string = [cljs.core.str(ssm.core.get_location.call(null)), cljs.core.str(url.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827))), cljs.core.str("%"), cljs.core.str(url.call(null, new cljs.core.Keyword(null, "key", "key", -1516042587)))].join("");
+  cljs.core.println.call(null, ssm.core.url_string);
+  return ssm.core.get_element.call(null, "result-url")["textContent"] = ssm.core.url_string;
+};
 ssm.core.button_click = function button_click() {
   ssm.core.encrypted_msg = ssm.core.encrypt_my_message.call(null);
+  cljs.core.println.call(null, [cljs.core.str("click db "), cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827)))].join(""));
+  cljs.core.println.call(null, [cljs.core.str("click key "), cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "key", "key", -1516042587)))].join(""));
+  cljs.core.println.call(null, [cljs.core.str("click secret "), cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "secret", "secret", 618547054)))].join(""));
   ssm.core.display_url.call(null, ssm.core.encrypted_msg);
-  return ssm.core.emit_socket.call(null, "writeIntoDb", ssm.core.encrypted_msg);
+  return ssm.core.emit_socket.call(null, "writeIntoDb", [cljs.core.str([cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "db-key", "db-key", 761140827)))].join("")), cljs.core.str("%"), cljs.core.str([cljs.core.str(ssm.core.encrypted_msg.call(null, new cljs.core.Keyword(null, "secret", "secret", 618547054)))].join(""))].join(""));
+};
+ssm.core.message_exists = function message_exists() {
+  ssm.core.show_success.call(null);
+  return ssm.core.get_element.call(null, "show-button").addEventListener("click", function() {
+    return ssm.core.emit_socket.call(null, "requestData", cljs.core.first.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), /%/)));
+  });
+};
+ssm.core.message_doesnt_exists = function message_doesnt_exists() {
+  return cljs.core.println.call(null, "oh nooooooo");
+};
+ssm.core.message_handler = function message_handler(msg) {
+  if (cljs.core._EQ_.call(null, msg, "true")) {
+    return ssm.core.message_exists.call(null);
+  } else {
+    if (cljs.core._EQ_.call(null, msg, "false")) {
+      return ssm.core.message_doesnt_exists.call(null);
+    } else {
+      return null;
+    }
+  }
 };
 ssm.core.todo_save = function todo_save() {
   cljs.core.println.call(null, "save");
@@ -28989,8 +29226,15 @@ ssm.core.todo_save = function todo_save() {
 };
 ssm.core.todo_get = function todo_get() {
   cljs.core.println.call(null, "get");
-  return ssm.core.show_success.call(null);
+  return ssm.core.emit_socket.call(null, "containsMessage", cljs.core.first.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), /%/)));
 };
+ssm.core.on_socket.call(null, "isInDatabase", function(msg) {
+  return ssm.core.message_handler.call(null, msg);
+});
+ssm.core.on_socket.call(null, "getData", function(msg) {
+  cljs.core.println.call(null, msg);
+  return cljs.core.println.call(null, ssm.core.decrypt.call(null, msg, cljs.core.last.call(null, clojure.string.split.call(null, ssm.core.get_url_hash.call(null), /%/))));
+});
 ssm.core.do_my_stuff = function do_my_stuff() {
   if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "save-message")) {
     return ssm.core.todo_save.call(null);

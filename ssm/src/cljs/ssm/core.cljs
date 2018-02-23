@@ -1,5 +1,6 @@
 (ns ssm.core
   (:require   [goog.dom :as dom]
+              [clojure.string :as str]
                ))
 
 (enable-console-print!)
@@ -33,23 +34,19 @@
   (-> js/window
     (.eval (str "document.getElementById('" id "').classList.remove('hidden')"))))
 
-(defn display-url [url]
-  (-> js/document
-    (.getElementById "result-url")
-    ))
-    
+
+(defn get-location []
+  (aget js/location "href"))
+
+
 (defn get-url-hash []
-      (println "hash")
-      (str (last (str/split (get-location) #"/"))))
+    (str (last (str/split (get-location) #"/"))))
 
 (defn has-valid-length []
   (println "len")
     (if
       (= (count (get-url-hash)) 65) (println "right length")
       ))
-
-(defn get-location []
-  (aget js/location "href"))
 
 (println (get-location))
 
@@ -102,20 +99,44 @@
   (def my-db-key (subs my-hash 0 12))
   (def my-key (subs my-hash 12 64))
   (def my-secret (encrypt my-msg my-key))
-  (println (str my-db-key "%" my-key))
-  (str my-db-key "%" my-secret)
+  {:key my-key :db-key my-db-key :secret my-secret}
   )
 
 
 (defn add-click [id handler]
   (.addEventListener (get-element id) "click" handler))
 
+(defn display-url [url]
+  (def url-string (str (get-location) (url :db-key) "%" (url :key)))
+  (println url-string)
+  (aset (get-element "result-url") "textContent" url-string))
+
+
 (defn button-click []
   (def encrypted-msg (encrypt-my-message))
+  (println (str "click db " (encrypted-msg :db-key)))
+  (println (str "click key " (encrypted-msg :key)))
+  (println (str "click secret " (encrypted-msg :secret)))
   (display-url encrypted-msg)
   (emit-socket
     "writeIntoDb"
-    encrypted-msg))
+    (str (str (encrypted-msg :db-key)) "%" (str (encrypted-msg :secret)) )))
+
+(defn message-exists []
+  (show-success)
+  (.addEventListener (get-element "show-button") "click"
+    (fn []
+      (emit-socket "requestData" (first (str/split (get-url-hash) #"%")))
+      ))
+  )
+
+(defn message-doesnt-exists []
+  (println "oh nooooooo"))
+
+(defn message-handler [msg]
+  (cond
+    (= msg "true") (message-exists)
+    (= msg "false") (message-doesnt-exists)))
 
 (defn todo-save []
   (println "save")
@@ -123,7 +144,21 @@
 
 (defn todo-get []
   (println "get")
-  (show-success))
+  ; (def db-key (first (str/split (get-url-hash) #"%")))
+  ; (def my-key (last (str/split (get-url-hash) #"%")))
+  ;
+  ; (println (str "dbkey" db-key))
+  ; (println (str "key" my-key))
+  (emit-socket "containsMessage" (first (str/split (get-url-hash) #"%"))))
+
+(on-socket "isInDatabase"
+  (fn [msg]
+    (message-handler msg)))
+
+(on-socket "getData"
+  (fn [msg]
+    (println msg)
+    (println (decrypt msg (last (str/split (get-url-hash) #"%"))))))
 
 (defn do-my-stuff []
     (cond

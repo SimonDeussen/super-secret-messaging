@@ -64,19 +64,24 @@ io.on('connection', function(socket)
   });
 
   socket.on("containsMessage", function(msg) {
-    let key = msg.key;
-    readDatafromDb(key).then((value) => {
-      if (value == null) {
+    console.log(msg)
+    let key = msg;
+    readDatafromDb(key).then((result) => {
+      if (result != null) {
         socket.emit("isInDatabase", "true");
+        console.log("found it")
+      } else {
+        socket.emit("isInDatabase", "false");
+        console.log("noooo couldn found it")
       }
-      socket.emit("isInDatabase", "false");
     });
   });
 
   socket.on("requestData", function(msg) {
-    let key = msg.key;
-    readDatafromDb(key).then((value) => {
-      socket.emit("getData", value.get(key));
+    let key = msg;
+    readDatafromDb(key).then((result) => {
+      console.log("read from db " +  result.value);
+      socket.emit("getData", result.value);
       deleteMessageInDb(key);
     });
   });
