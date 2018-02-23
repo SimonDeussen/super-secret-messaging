@@ -7,8 +7,13 @@
 (println "Hello clojurescript!")
 (js-invoke js/socket "emit" "hello" "clojure")
 
-(defn emit-socket [socketName msg]
-  (js-invoke js/socket "emit" socketName msg))
+(defn emit-socket [socket-name msg]
+  (js-invoke js/socket "emit" socket-name msg))
+
+(defn on-socket [socket-name function]
+  (js-invoke js/socket "on" socket-name function))
+
+(on-socket "test" (fn [msg] (println msg)))
 
 (defn get-text-content [id]
   (-> js/document
@@ -24,15 +29,26 @@
   (-> js/document
     (.getElementById id)))
 
+(defn delete-hidden-class [id]
+  (-> js/window
+    (.eval (str "document.getElementById('" id "').classList.remove('hidden')"))))
+
+
 (defn get-location []
   (aget js/location "href"))
 
 (println (get-location))
 
+(defn show-success []
+  (delete-hidden-class "message-found-headline")
+  (delete-hidden-class "message-found-text")
+  (delete-hidden-class "show-button")
+  )
+
 (defn do-my-stuff []
     (cond
       (= (str (get-inner-html "state")) "save-message") (println "save")
-      (= (str (get-inner-html "state")) "get-message") (println "get")
+      (= (str (get-inner-html "state")) "get-message") (show-success)
       :else (println "no")))
 
 (do-my-stuff)

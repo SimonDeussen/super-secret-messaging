@@ -28921,9 +28921,15 @@ goog.require("goog.dom");
 cljs.core.enable_console_print_BANG_.call(null);
 cljs.core.println.call(null, "Hello clojurescript!");
 cljs.core.js_invoke.call(null, socket, "emit", "hello", "clojure");
-ssm.core.emit_socket = function emit_socket(socketName, msg) {
-  return cljs.core.js_invoke.call(null, socket, "emit", socketName, msg);
+ssm.core.emit_socket = function emit_socket(socket_name, msg) {
+  return cljs.core.js_invoke.call(null, socket, "emit", socket_name, msg);
 };
+ssm.core.on_socket = function on_socket(socket_name, function$) {
+  return cljs.core.js_invoke.call(null, socket, "on", socket_name, function$);
+};
+ssm.core.on_socket.call(null, "test", function(msg) {
+  return cljs.core.println.call(null, msg);
+});
 ssm.core.get_text_content = function get_text_content(id) {
   return document.getElementById(id).value;
 };
@@ -28933,16 +28939,24 @@ ssm.core.get_inner_html = function get_inner_html(id) {
 ssm.core.get_element = function get_element(id) {
   return document.getElementById(id);
 };
+ssm.core.delete_hidden_class = function delete_hidden_class(id) {
+  return window.eval([cljs.core.str("document.getElementById('"), cljs.core.str(id), cljs.core.str("').classList.remove('hidden')")].join(""));
+};
 ssm.core.get_location = function get_location() {
   return location["href"];
 };
 cljs.core.println.call(null, ssm.core.get_location.call(null));
+ssm.core.show_success = function show_success() {
+  ssm.core.delete_hidden_class.call(null, "message-found-headline");
+  ssm.core.delete_hidden_class.call(null, "message-found-text");
+  return ssm.core.delete_hidden_class.call(null, "show-button");
+};
 ssm.core.do_my_stuff = function do_my_stuff() {
   if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "save-message")) {
     return cljs.core.println.call(null, "save");
   } else {
     if (cljs.core._EQ_.call(null, [cljs.core.str(ssm.core.get_inner_html.call(null, "state"))].join(""), "get-message")) {
-      return cljs.core.println.call(null, "get");
+      return ssm.core.show_success.call(null);
     } else {
       return cljs.core.println.call(null, "no");
     }

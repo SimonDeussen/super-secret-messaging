@@ -85,6 +85,8 @@ io.on('connection', function(socket)
   {
     console.log("hello from " + msg);
   })
+
+  socket.emit("test", "hello from node")
 });
 
 function writeIntoDb(key, value) {

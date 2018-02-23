@@ -7,8 +7,31 @@
   </head>
 
   <body>
-    <h1>GET MESSAGE</h1>
 
+    <div class="navbar">
+      <div class="logo-wrapper">
+        <img src="./public/logo.svg" alt="Super secret messaging"/>
+      </div>
+    </div>
+
+    <div class="main-wrapper">
+      <div class="inner">
+        <div class="upper-part">
+          <h1 class="hidden" id="message-found-headline">get your super secret message here</h1>
+          <h1 class="hidden" id="message-not-found-headline">we didnt find your message</h1>
+
+        </div>
+        <div class="lower-part">
+            <span class="hidden" id="message-found-text">WARNING! showing the message deletes the message</span>
+            <button class="hidden" id="show-button">show me the message!</button>
+        </div>
+      </div>
+
+    </div>
+
+    <button id="show-button">
+
+    </button>
     <div class="hidden" id="state">get-message</div>
 
     <script src="/socket.io/socket.io.js"></script>
