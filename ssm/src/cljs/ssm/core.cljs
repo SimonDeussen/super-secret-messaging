@@ -33,6 +33,10 @@
   (-> js/window
     (.eval (str "document.getElementById('" id "').classList.remove('hidden')"))))
 
+(defn display-url [url]
+  (-> js/document
+    (.getElementById "result-url")
+    ))
 
 (defn get-location []
   (aget js/location "href"))
@@ -96,14 +100,16 @@
 (defn add-click [id handler]
   (.addEventListener (get-element id) "click" handler))
 
-(defn dummy-click []
+(defn button-click []
+  (def encrypted-msg (encrypt-my-message))
+  (display-url encrypted-msg)
   (emit-socket
     "writeIntoDb"
-    (encrypt-my-message)))
+    encrypted-msg))
 
 (defn todo-save []
   (println "save")
-  (add-click "submit" dummy-click))
+  (add-click "submit" button-click))
 
 (defn todo-get []
   (println "get")
@@ -116,35 +122,3 @@
       :else (println "no")))
 
 (do-my-stuff)
-
-
-
-(comment "
-TODO
-
-SAVE
-
-getMessage() DONE
-  ret message
-
-encryptMessage(message)
-  ret key
-      cmessage
-
-hashMessage(cmessage)
-  ret dbKey
-
-saveMessage(dbkey, cmessage)
-
-GET
-
-splitUrl()
-  ret dkbey
-      key
-
-getDataAndDelete(dkbey)
-  ret cmessage
-
-decryptMessage(key, cmessage)
-  ret message
-")

@@ -28942,6 +28942,9 @@ ssm.core.get_element = function get_element(id) {
 ssm.core.delete_hidden_class = function delete_hidden_class(id) {
   return window.eval([cljs.core.str("document.getElementById('"), cljs.core.str(id), cljs.core.str("').classList.remove('hidden')")].join(""));
 };
+ssm.core.display_url = function display_url(url) {
+  return document.getElementById("result-url");
+};
 ssm.core.get_location = function get_location() {
   return location["href"];
 };
@@ -28975,12 +28978,14 @@ ssm.core.encrypt_my_message = function encrypt_my_message() {
 ssm.core.add_click = function add_click(id, handler) {
   return ssm.core.get_element.call(null, id).addEventListener("click", handler);
 };
-ssm.core.dummy_click = function dummy_click() {
-  return ssm.core.emit_socket.call(null, "writeIntoDb", ssm.core.encrypt_my_message.call(null));
+ssm.core.button_click = function button_click() {
+  ssm.core.encrypted_msg = ssm.core.encrypt_my_message.call(null);
+  ssm.core.display_url.call(null, ssm.core.encrypted_msg);
+  return ssm.core.emit_socket.call(null, "writeIntoDb", ssm.core.encrypted_msg);
 };
 ssm.core.todo_save = function todo_save() {
   cljs.core.println.call(null, "save");
-  return ssm.core.add_click.call(null, "submit", ssm.core.dummy_click);
+  return ssm.core.add_click.call(null, "submit", ssm.core.button_click);
 };
 ssm.core.todo_get = function todo_get() {
   cljs.core.println.call(null, "get");
