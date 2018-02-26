@@ -7,10 +7,6 @@
 
 (defn seperator [] ".")
 
-
-(println "Hello clojurescript!")
-(js-invoke js/socket "emit" "hello" "clojure")
-
 (defn emit-socket [socket-name msg]
   (js-invoke js/socket "emit" socket-name msg))
 
@@ -67,14 +63,14 @@
   (delete-hidden-class "show-button")
   )
 
-(defn hash-md5 [input]
+(defn hash-sha256 [input]
   (-> js/Crypt
     (.-HASH)
     (.sha256 input)
     (.toString)))
 
 (defn build-hash [input]
-  (hash-md5
+  (hash-sha256
     (str
       input
       (js-invoke js/Date "now")
@@ -89,20 +85,6 @@
   (-> js/Crypt
     (.-AES)
     (.decrypt input key)))
-
-; (def my-msg "blablabssslab")
-; (def my-hash (hash-md5 my-msg))
-; (def my-db-key (subs my-hash 0 12))
-; (def my-key (subs my-hash 12 64))
-; (def my-secret (encrypt my-msg my-key))
-; (def my-plain (decrypt my-secret my-key))
-;
-; (println (str "plain text: " my-msg))
-; (println (str "my-hash:    " my-hash))
-; (println (str "my-key:     " my-key))
-; (println (str "my-db-key:  " my-db-key))
-; (println (str "encrypted:  " my-secret))
-; (println (str "decrypted:  " my-plain))
 
 (defn encrypt-my-message []
   (def my-msg (get-text-content "textInput"))
@@ -119,7 +101,6 @@
 
 (defn display-url [url]
   (def url-string (str (get-location) (url :db-key) (seperator) (url :key)))
-  (println url-string)
   (remove-element "textInput")
   (remove-element "submit")
   (delete-hidden-class "go-to-home")
@@ -131,9 +112,9 @@
 
 
 (defn button-click []
+  (println "click")
   (def encrypted-msg (encrypt-my-message))
   (display-url encrypted-msg)
-  (println (str (str (encrypted-msg :db-key)) (seperator) (str (encrypted-msg :secret)) ))
 
   (emit-socket
     "writeIntoDb"
@@ -148,7 +129,6 @@
   )
 
 (defn message-doesnt-exists []
-  (println "oh nooooooo")
   (delete-hidden-class "message-not-found-headline"))
 
 (defn message-handler [msg]
@@ -156,21 +136,20 @@
     (= msg "true") (message-exists)
     (= msg "false") (message-doesnt-exists)))
 
-(defn todo-save []
-  (println "save")
-  (add-click "submit" button-click))
-
-(defn todo-get []
-  (println "get")
-  (emit-socket "containsMessage" (first (str/split (get-url-hash) (seperator)))))
-
 (on-socket "isInDatabase"
   (fn [msg]
     (message-handler msg)))
 
+  (defn todo-save []
+  (println "save")
+  (add-click "submit" button-click))
+
+  (defn todo-get []
+    (println "get")
+    (emit-socket "containsMessage" (first (str/split (get-url-hash) (seperator)))))
+
 (on-socket "getData"
   (fn [msg]
-    (println msg)
     (hide-element "show-button")
     (hide-element "message-found-text")
     (delete-hidden-class "go-to-home")

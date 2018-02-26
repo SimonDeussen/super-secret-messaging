@@ -6,4 +6,4 @@
 
   :cljsbuild {
     :builds [{:source-paths ["src/cljs"]
-              :compiler {:output-to "resources/public/core.js" :optimizations :advanced}}]})
+              :compiler {:output-to "resources/public/core.js" }}]})

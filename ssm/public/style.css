@@ -71,7 +71,7 @@ body {
   font-weight: 800;
   font-style: italic;
   font-size: 48px;
-  color: #242402;
+  color: #000000;
   text-align: center;
   border: none;
   outline: none;
@@ -84,14 +84,14 @@ body {
 
 #link-wrapper {
   font-size: 18px;
-  padding: 110px;
+  padding: 30px;
   padding-top: 60px;
   box-sizing: border-box;
   font-size: 18px;
   color: #5c5c5c;
   position: relative;
   justify-content: center;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 
 #link-wrapper > a {

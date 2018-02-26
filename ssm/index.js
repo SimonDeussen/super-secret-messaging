@@ -59,7 +59,7 @@ io.on('connection', function(socket)
   socket.on("writeIntoDb", function(msg)
   {
     let key = msg.split(seperator)[0];
-    let value = msg.split(seperator)[1].substring(0,1000);
+    let value = msg.split(seperator)[1].substring(0,1200);
     console.log("db-key: " + key);
     console.log("msg: " + value);
     writeIntoDb(key, value);
